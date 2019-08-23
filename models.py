@@ -34,35 +34,41 @@ class Home(Model):
   phone_number = CharField()
   email = CharField()
   link = CharField()
+  user = ForeignKeyField(User, backref='home') 
 
   class Meta:
     database = DATABASE
 
-class Events(Model):
+class Event(Model):
+  city = CharField()
   address = CharField()
-  long = CharField()
-  lat = CharField()
+  longitude = CharField()
+  latitude = CharField()
   name = CharField()
   description = CharField()
   image = CharField()
+  phone_number = CharField()
+  link = CharField()
 
   class Meta:
     database = DATABASE
 
-class Resources(Model):
+class Resource(Model):
+  city = CharField()
   address = CharField()
-  lat = CharField()
-  long = CharField()
+  latitude = CharField()
+  longitude = CharField()
   description = CharField()
-  title = CharField()
+  name = CharField()
   phone_number = CharField()
+  link = CharField()
 
   class Meta:
     database = DATABASE
 
 def initialize():
   DATABASE.connect()
-  DATABASE.create_tables([User, Events, Resources], safe=True)
+  DATABASE.create_tables([User, Event, Resource, Home], safe=True)
   # says look at the tables if they're already created don't do anything
   print("tables created")
   DATABASE.close()

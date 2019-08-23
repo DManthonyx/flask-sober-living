@@ -7,6 +7,8 @@ import models
 from api.user import user
 from api.api import api
 from api.home import home
+from api.resource import resource
+from api.event import event
 
 DEBUG = True
 PORT = 8000
@@ -28,10 +30,14 @@ def load_user(userid):
 CORS(user, origins=['http://localhost:3000'], supports_credentials=True)
 CORS(api, origins=['http://localhost:3000'], supports_credentials=True)
 CORS(home, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(resource, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(event, origins=['http://localhost:3000'], supports_credentials=True)
 
 app.register_blueprint(user)
 app.register_blueprint(api)
 app.register_blueprint(home)
+app.register_blueprint(resource)
+app.register_blueprint(event)
 
 @app.before_request 
 def before_request():
@@ -45,13 +51,18 @@ def after_request(response):
   g.db.close()
   return response
 
-# The default URL ends in / ("my-website.com/").
-@app.route('/home') #decorator, anything with the @ is a decorator, and its a function
-def get_user():
-  query.Home.select()
+
+@app.route('/', methods=["GET"])
+def get_homes():
+  try:
+    homes = [model_to_dict(home) for home in models.Home.select()]
+    return jsonify(data=homes, status={"code": 200, "message": "Success"})
+  except models.DoesNotExist:
+    return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
+ 
 # before a function
-def index(): #name this method whatever
-  return 'hi' # res.send in express
+# def index(): #name this method whatever
+#   return 'hi' # res.send in express
 
 
 # Run the app when the program starts! 

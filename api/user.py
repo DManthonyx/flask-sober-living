@@ -36,18 +36,22 @@ def login():
   try:
     user = models.User.get(models.User.email== payload['email'])
     user_dict = model_to_dict(user)
+    print(user, "<== THIS IS THE LOGIN USER")
+    login_user(user)
+    print(current_user.__dict__, "<== THIS IS THE CURRENT_USER DICT")
+    print(current_user.is_active, "<== THIS SHOULD BE TRUE")
+    print(current_user.get_id(), "<== THIS SHOULD BE 1")
+    print(current_user.is_authenticated, "THIS SHOULD BE TRUE")
+    print(current_user.is_anonymous, "THIS SHOULD BE FALSE")
     if(check_password_hash(user_dict['password'], payload['password'])):
       del user_dict['password']
-      print(current_user.__dict__, 'current user')
-      return jsonify(data=user_dict, status={"code": 200, "message": "Success"})
+      return jsonify(data=user_dict, session=login_user(user), status={"code": 200, "message": "Success"})
     else:
       return jsonify(data={}, status={"code": 401, "message": "Username or Password is incorrect"})
   except models.DoesNotExist:
     return jsonify(data={}, status={"code": 401, "message": "Username or Password is incorrect"})
 
-
 @user.route('/logout')
 def logout():
   logout_user()
-  print(current_user.__dict__, 'this is current user')
-  return jsonify(status={"code": 200, "message": "logout"})
+  return jsonify(status={"code": 200, "message": "logged out"})
