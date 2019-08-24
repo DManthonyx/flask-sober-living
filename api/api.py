@@ -11,6 +11,6 @@ def get_info():
   try:
     users = [model_to_dict(user) for user in models.User.select()]
     
-    return jsonify(data=users, status={"code": 200, "message": "Success"})
+    return jsonify(data=users,  status={"code": 200, "message": "Success"})
   except models.DoesNotExist:
     return jsonify(data={}, status={"code": 401, "message": "There was an error getting Home"})

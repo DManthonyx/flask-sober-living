@@ -40,6 +40,25 @@ def create_home(id):
 
         return jsonify(data=home_dict, status={"code": 201, "message": "Success"})
 
+@home.route('/<id>/edit', methods=["PUT"])
+def update_home(id):
+  pay_file = request.files
+  print(pay_file)
+  payload = request.form.to_dict()
+  dict_file = pay_file.to_dict()
+  print(dict_file)
+  file_picture_path = save_picture(dict_file['file'])
+  payload['image'] = file_picture_path
+  query =  models.Home.update(**payload).where(models.Home.id == id)
+  query.execute() # run the query, must do for update and delete
+  # excuse as per docs returns the row updated
+
+  # if we want to return the update resource we have to find it
+  updated_home = models.Home.get_by_id(id)
+
+
+  return jsonify(data=model_to_dict(updated_home), status={"code": 200, "message": "Success"})
+
 @home.route('/', methods=["GET"])
 def get_homes():
   try:
@@ -48,3 +67,9 @@ def get_homes():
   except models.DoesNotExist:
     return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
  
+@home.route('/<id>/delete', methods=["DELETE"])
+def delete_home(id):
+  query = models.Home.delete().where(models.Home.id == id)
+  query.execute()
+
+  return jsonify(data="resource successfully deleted", status={"code": 200, "message": "Home deleted"})

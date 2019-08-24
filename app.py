@@ -55,6 +55,7 @@ def after_request(response):
 @app.route('/', methods=["GET"])
 def get_homes():
   try:
+    print('this is landing page')
     homes = [model_to_dict(home) for home in models.Home.select()]
     return jsonify(data=homes, status={"code": 200, "message": "Success"})
   except models.DoesNotExist:
@@ -63,7 +64,6 @@ def get_homes():
 # before a function
 # def index(): #name this method whatever
 #   return 'hi' # res.send in express
-
 
 # Run the app when the program starts! 
 if __name__ == '__main__':

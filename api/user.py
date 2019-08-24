@@ -55,3 +55,11 @@ def login():
 def logout():
   logout_user()
   return jsonify(status={"code": 200, "message": "logged out"})
+
+@user.route('/', methods=["GET"])
+def get_users():
+  try:
+    users = [model_to_dict(user) for user in models.User.select()]
+    return jsonify(data=users, status={"code": 200, "message": "Success"})
+  except models.DoesNotExist:
+    return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
