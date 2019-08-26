@@ -6,7 +6,7 @@ from PIL import Image
 from flask import Blueprint, request, jsonify, url_for, send_file
 from playhouse.shortcuts import model_to_dict
 
-home = Blueprint('home', 'home', url_prefix='/home')
+home = Blueprint('home', 'home', url_prefix='/locations')
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
@@ -63,6 +63,16 @@ def update_home(id):
 def get_homes():
   try:
     homes = [model_to_dict(home) for home in models.Home.select()]
+    return jsonify(data=homes, status={"code": 200, "message": "Success"})
+  except models.DoesNotExist:
+    return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
+
+@home.route('/<id>/user', methods=["GET"])
+def get_user_homes(id):
+  try:
+    homes = [model_to_dict(home) for home in models.Home.select().join(models.User).where(models.User.id == id)] 
+
+    print(type(homes))
     return jsonify(data=homes, status={"code": 200, "message": "Success"})
   except models.DoesNotExist:
     return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})

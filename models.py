@@ -2,7 +2,10 @@ from peewee import *
 from flask_login import UserMixin 
 import datetime # to help deal with datetimes
 
-DATABASE = SqliteDatabase('sober.sqlite')
+
+
+DATABASE = connect(os.environ.get('DATABASE_URL'))
+# DATABASE = SqliteDatabase('sober.sqlite')
 # sqlite is just a file on your computer
 # good for expermintation use mysql postgree for production
 
@@ -12,11 +15,9 @@ class User(UserMixin, Model):
   user_type = CharField()
   re_password = CharField()
   password = CharField()
-  age = CharField()
-  ethnicity = CharField()
-  gender = CharField()
   phone_number = CharField()
   email = CharField()
+
 
   class Meta:
   # when the class object creates an object

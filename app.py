@@ -1,6 +1,7 @@
-from flask import Flask, g
+import os
+rom flask import Flask, g
 from flask_cors import CORS
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user, current_user, logout_user
 import models
 
 # import the blueprint
@@ -60,10 +61,19 @@ def get_homes():
     return jsonify(data=homes, status={"code": 200, "message": "Success"})
   except models.DoesNotExist:
     return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
+
+@app.route('/logout')
+def logout():
+  logout_user()
+  return jsonify(status={"code": 200, "message": "logged out"})
  
 # before a function
 # def index(): #name this method whatever
 #   return 'hi' # res.send in express
+
+if 'ON_HEROKU' in os.environ:
+    print('hitting ')
+    models.initialize()
 
 # Run the app when the program starts! 
 if __name__ == '__main__':
