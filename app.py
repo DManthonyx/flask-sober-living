@@ -46,12 +46,13 @@ def after_request(response):
 
 @app.route('/', methods=["GET"])
 def get_homes():
-  try:
-    print('this is landing page')
-    homes = [model_to_dict(home) for home in models.Home.select()]
-    return jsonify(data=homes, status={"code": 200, "message": "Success"})
-  except models.DoesNotExist:
-    return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
+  return "home page"
+  # try:
+  #   print('this is landing page')
+  #   homes = [model_to_dict(home) for home in models.Home.select()]
+  #   return jsonify(data=homes, status={"code": 200, "message": "Success"})
+  # except models.DoesNotExist:
+  #   return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
 
 if 'ON_HEROKU' in os.environ:
     print('hitting ')
