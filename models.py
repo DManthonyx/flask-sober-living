@@ -4,10 +4,10 @@ import datetime # to help deal with datetimes
 
 
 
-# DATABASE = connect(os.environ.get('DATABASE_URL'))
+DATABASE = connect(os.environ.get('DATABASE_URL'))
 
 # working locally
-DATABASE = SqliteDatabase('sober.sqlite')
+# DATABASE = SqliteDatabase('sober.sqlite')
 
 # sqlite is just a file on your computer
 # good for expermintation use mysql postgree for production
