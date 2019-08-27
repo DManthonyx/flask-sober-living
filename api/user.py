@@ -63,3 +63,10 @@ def get_users():
     return jsonify(data=users, status={"code": 200, "message": "Success"})
   except models.DoesNotExist:
     return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
+
+@user.route('/<id>/delete', methods=["DELETE"])
+def delete_user(id):
+  query = models.User.delete().where(models.User.id == id)
+  query.execute()
+
+  return jsonify(data="resource successfully deleted", status={"code": 200, "message": "User deleted"})

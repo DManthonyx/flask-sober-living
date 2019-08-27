@@ -4,8 +4,11 @@ import datetime # to help deal with datetimes
 
 
 
-DATABASE = connect(os.environ.get('DATABASE_URL'))
-# DATABASE = SqliteDatabase('sober.sqlite')
+# DATABASE = connect(os.environ.get('DATABASE_URL'))
+
+# working locally
+DATABASE = SqliteDatabase('sober.sqlite')
+
 # sqlite is just a file on your computer
 # good for expermintation use mysql postgree for production
 
@@ -40,36 +43,10 @@ class Home(Model):
   class Meta:
     database = DATABASE
 
-class Event(Model):
-  city = CharField()
-  address = CharField()
-  longitude = CharField()
-  latitude = CharField()
-  name = CharField()
-  description = CharField()
-  image = CharField()
-  phone_number = CharField()
-  link = CharField()
-
-  class Meta:
-    database = DATABASE
-
-class Resource(Model):
-  city = CharField()
-  address = CharField()
-  latitude = CharField()
-  longitude = CharField()
-  description = CharField()
-  name = CharField()
-  phone_number = CharField()
-  link = CharField()
-
-  class Meta:
-    database = DATABASE
 
 def initialize():
   DATABASE.connect()
-  DATABASE.create_tables([User, Event, Resource, Home], safe=True)
+  DATABASE.create_tables([User, Home], safe=True)
   # says look at the tables if they're already created don't do anything
   print("tables created")
   DATABASE.close()

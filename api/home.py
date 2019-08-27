@@ -22,19 +22,19 @@ def save_picture(form_picture):
 @home.route('/<id>/createhome', methods=["POST"])
 def create_home(id):
     pay_file = request.files
-    # print(pay_file, 'this is home')
+
     payload = request.form.to_dict()
-    # print(payload, 'this is home')
+
     dict_file = pay_file.to_dict()
     try:
         models.Home.get(models.Home.longitude == payload['longitude'] and models.Home.latitude == payload['latitude'])
         return jsonify(data={}, status={"code": 401, "message": "address aleady used"})
-    except models.DoesNotExist: # boolean on the model
+    except models.DoesNotExist: 
         file_picture_path = save_picture(dict_file['file'])
         payload['user'] = id
         payload['image'] = file_picture_path
         home = models.Home.create(**payload)
-        # we can't send back a class we can only send back dicts, lists
+  
         home_dict = model_to_dict(home)
         print(home_dict)
 
@@ -50,12 +50,9 @@ def update_home(id):
   file_picture_path = save_picture(dict_file['file'])
   payload['image'] = file_picture_path
   query =  models.Home.update(**payload).where(models.Home.id == id)
-  query.execute() # run the query, must do for update and delete
-  # excuse as per docs returns the row updated
+  query.execute()
 
-  # if we want to return the update resource we have to find it
   updated_home = models.Home.get_by_id(id)
-
 
   return jsonify(data=model_to_dict(updated_home), status={"code": 200, "message": "Success"})
 
