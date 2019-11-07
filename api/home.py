@@ -32,13 +32,23 @@ def create_home(id):
     except models.DoesNotExist: 
         file_picture_path = save_picture(dict_file['file'])
         payload['user'] = id
-        payload['image'] = file_picture_path
+        payload['image_1'] = file_picture_path
+        payload['image_2'] = file_picture_path
         home = models.Home.create(**payload)
   
         home_dict = model_to_dict(home)
         print(home_dict)
 
         return jsonify(data=home_dict, status={"code": 201, "message": "Success"})
+
+@home.route('/<id>', methods=["GET"])
+def get_home(id):
+  try: 
+    home = models.Home.get(models.Home.id == id)
+    home_dict = model_to_dict(home)
+    return jsonify(data=home_dict, status={"code": 200, "message": "Success"})
+  except models.DoesNotExist:
+    return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
 
 @home.route('/<id>/edit', methods=["PUT"])
 def update_home(id):
@@ -60,6 +70,7 @@ def update_home(id):
 def get_homes():
   try:
     homes = [model_to_dict(home) for home in models.Home.select()]
+    print(homes, "this is homes")
     return jsonify(data=homes, status={"code": 200, "message": "Success"})
   except models.DoesNotExist:
     return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
@@ -67,8 +78,7 @@ def get_homes():
 @home.route('/<id>/user', methods=["GET"])
 def get_user_homes(id):
   try:
-    homes = [model_to_dict(home) for home in models.Home.select().join(models.User).where(models.User.id == id)] 
-
+    homes = [model_to_dict(home) for home in models.Home.select().join(models.User).where(models.User.id == id)]
     print(type(homes))
     return jsonify(data=homes, status={"code": 200, "message": "Success"})
   except models.DoesNotExist:

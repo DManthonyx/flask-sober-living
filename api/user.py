@@ -64,9 +64,20 @@ def get_users():
   except models.DoesNotExist:
     return jsonify(data={}, status={"code": 401, "message": "There was an error getting the resource"})
 
-@user.route('/<id>/delete', methods=["DELETE"])
-def delete_user(id):
-  query = models.User.delete().where(models.User.id == id)
-  query.execute()
+@user.route('/<id>/admindeletebusiness', methods=["DELETE"])
+def delete_business(id):
+  queryUser = models.User.delete().where(models.User.id == id)
+  queryUser.execute()
+  queryHomes = models.Home.delete().where(models.Home.user == id)
+  queryHomes.execute()
+
+@user.route('/<id>/deleteaccount', methods=["DELETE"])
+def delete_account(id):
+  queryUser = models.User.delete().where(models.User.id == id)
+  queryUser.execute()
+  queryHomes = models.Home.delete().where(models.Home.user == id)
+  queryHomes.execute()
+  logout_user()
+
 
   return jsonify(data="resource successfully deleted", status={"code": 200, "message": "User deleted"})
