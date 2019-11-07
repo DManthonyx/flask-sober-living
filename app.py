@@ -12,8 +12,6 @@ from api.home import home
 DEBUG = True
 PORT = 8000
 
-CORS(app)
-
 login_manager = LoginManager()
 
 app = Flask(__name__, static_url_path="", static_folder="static")
