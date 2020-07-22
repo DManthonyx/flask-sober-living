@@ -7,7 +7,7 @@ import models
 # import the blueprint
 from api.user import user
 from api.home import home
-
+print('hello')
 
 DEBUG = True
 PORT = 8000
